@@ -4,31 +4,32 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/toDoItems"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true"
-        android:layout_above="@+id/add_item" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/todoList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </android.support.v7.widget.RecyclerView>
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/new_item_todo"
+        android:id="@+id/new_todo_text"
         android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/add_item"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/add_todo_btn"
+        android:layout_toStartOf="@+id/add_todo_btn" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/add_item_btn"
-        android:id="@+id/add_item"
-        android:onClick="onAddItem"
-        android:layout_alignBottom="@+id/new_item_todo"
+        android:text="Add To Do"
+        android:id="@+id/add_todo_btn"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:onClick="addNewTodo"/>
+
 
 </RelativeLayout>

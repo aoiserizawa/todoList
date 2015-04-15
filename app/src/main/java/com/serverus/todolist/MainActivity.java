@@ -1,27 +1,21 @@
 package com.serverus.todolist;
 
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
-import android.annotation.TargetApi;
-import android.os.Build;
+
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.widget.Adapter;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -29,85 +23,52 @@ public class MainActivity extends ActionBarActivity {
     ArrayAdapter<String> itemsAdapter;
     ListView myItems;
 
+    ToDoAdapter adapter;
+
+    private RecyclerView myTodoList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        myItems = (ListView) findViewById(R.id.toDoItems);
 
-        items = new ArrayList<String>();
 
-        itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
+        myTodoList = (RecyclerView) findViewById(R.id.todoList);
 
-        myItems.setAdapter(itemsAdapter);
+        adapter = new ToDoAdapter(this, getData());
 
-        items.add("egg");
-        items.add("flour");
+        myTodoList.setAdapter(adapter);
+
+        myTodoList.setLayoutManager(new LinearLayoutManager(this));
+
 
     }
 
-    public void onAddItem(View view){
-        EditText newItem = (EditText) findViewById(R.id.new_item_todo);
+    public static List<Data> getData(){
 
-        String itemText = newItem.getText().toString();
+        List<Data> data = new ArrayList<>();
 
-        itemsAdapter.add(itemText);
+        String[] myItems = {"Buy Foods", "Throw garbage" };
 
-        newItem.setText("");
+        for (int i = 0; i < myItems.length; i++){
+            Data myData = new Data();
 
-        removeToDo();
+            myData.todoItem = myItems[i % myItems.length];
+
+            data.add(myData);
+        }
+
+        return data;
+    }
+
+    public void addNewTodo(View view){
+        TextView todoText = (TextView) findViewById(R.id.new_todo_text);
+
+        
     }
 
 
-    public void removeToDo(){
-        myItems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent,View view, final int position, long id) {
-
-
-// OLD CODE: this make the smooth deletion but reuses the same row with deleted text, not a good idea to use
-// ObjectAnimator they said, its not reliable sometimes
-//                ObjectAnimator anim = ObjectAnimator.ofFloat(view, View.ALPHA, 0);
-//                anim.addListener(new AnimatorListenerAdapter() {
-//                    @Override
-//                    public void onAnimationEnd(Animator animation) {
-//                        items.remove(position);
-//                        itemsAdapter.notifyDataSetChanged();
-//                    }
-//                });
-//
-//                anim.start();
-
-                Animation fadeOut = new AlphaAnimation(1, 0);
-                fadeOut.setInterpolator(new AccelerateInterpolator());
-                fadeOut.setDuration(500);
-                fadeOut.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        items.remove(position);
-                        itemsAdapter.notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-
-                view.startAnimation(fadeOut);
-                return true;
-            }
-        });
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
